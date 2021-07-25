@@ -14,12 +14,26 @@ class SearchByDistrict extends Component {
     
         this.state = {
             error: null,
+            merror: null,
             isLoaded: false,
+            misLoaded: false,
             disIsLoaded: false,
             items: [],
             distr: [],
+            res:[],
             sValue: '',
             dValue: '',
+
+            getCurrentDate: ()=>{
+
+                let newDate = new Date()
+                let date = newDate.getDate();
+                let month = newDate.getMonth() + 1;
+                let year = newDate.getFullYear();
+                
+                return `${date}-${month<10?`0${month}`:`${month}`}-${year}` 
+                },
+
             statefetch: ()=>{
 
                 fetch(`https://cdn-api.co-vin.in/api/v2/admin/location/states`) 
@@ -29,8 +43,14 @@ class SearchByDistrict extends Component {
                         isLoaded: true,
                         items: pind.states
                     })
-                })
-              },
+                },
+                (error) => {
+                    this.setState({
+                    isLoaded: true,
+                    error
+                    })
+              })
+            },
 
               distfetch: (stateid)=>{
                   console.log("state ID" + stateid)
@@ -50,6 +70,25 @@ class SearchByDistrict extends Component {
                 })
 
               },
+
+              sessfetch: ()=>{
+
+                fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${this.state.dValue}&date=${this.state.getCurrentDate()}`) 
+                .then(sess => sess.json())
+                .then(result =>{
+                    this.setState({
+                        isLoaded: true,
+                        res: result.sessions
+                    })
+                },
+                (merror) => {
+                    this.setState({
+                    isLoaded: true,
+                    merror
+                    })
+                })
+        
+              }
 
             //   districtHandleChange(event){
             //     // console.log("dist change")
@@ -82,7 +121,7 @@ class SearchByDistrict extends Component {
 
     searchDist(){
 
-        
+        this.state.sessfetch();
         console.log("dvalue" + this.state.dValue)
     }
 
@@ -110,7 +149,13 @@ class SearchByDistrict extends Component {
     
     render() {
 
-        const { error, isLoaded, items, distr } = this.state;
+        const { error, isLoaded, items, distr, res, merror, misLoaded} = this.state;
+
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return <div>Loading...</div>;
+          } else {
         
         return (
             <div>
@@ -128,7 +173,7 @@ class SearchByDistrict extends Component {
                     //     id: "outlined-age-native-simple"
                     // }}
                     >
-                    <option aria-label="None" value={this.state.sValue}/>
+                    <option aria-label="None" value=''/>
 
                     {items.map(item=>(
                                 <option value={item.state_id}>{item.state_name}</option>
@@ -171,7 +216,7 @@ class SearchByDistrict extends Component {
                 </div>
 
                 <div>
-                            {items.map(item=>(
+                            {res.map(item=>(
                                 <div style={{marginBottom:'20px'}}>
                                     <div>Center Name: {item.name}</div>
                                     <div>Address: {item.address}</div>
@@ -183,6 +228,7 @@ class SearchByDistrict extends Component {
             </div>
         )
     }
+}
 }
 
 export default SearchByDistrict
