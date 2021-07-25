@@ -29,12 +29,6 @@ class SearchByDistrict extends Component {
                         isLoaded: true,
                         items: pind.states
                     })
-                },
-                (error) => {
-                    this.setState({
-                    isLoaded: true,
-                    error
-                    })
                 })
               },
 
