@@ -1,11 +1,15 @@
 import Select from '@material-ui/core/Select';
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
-import FormHelperText from "@material-ui/core/FormHelperText";
+// import FormHelperText from "@material-ui/core/FormHelperText";
 import { Button } from '@material-ui/core';
 import React, { Component } from 'react'
-import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom/cjs/react-dom.development';
+// import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom/cjs/react-dom.development';
+import { DataGrid, RowsProp, ColDef } from "@material-ui/data-grid";
+import './table.css';
+
+
 
 class SearchByDistrict extends Component {
 
@@ -23,6 +27,7 @@ class SearchByDistrict extends Component {
             res:[],
             sValue: '',
             dValue: '',
+            id: 1,
 
             getCurrentDate: ()=>{
 
@@ -88,7 +93,12 @@ class SearchByDistrict extends Component {
                     })
                 })
         
-              }
+              },
+
+              getID: ()=>{
+                this.state.id += this.state.id
+                return this.state.id
+            }
 
             //   districtHandleChange(event){
             //     // console.log("dist change")
@@ -111,6 +121,8 @@ class SearchByDistrict extends Component {
         this.stateHandleChange = this.stateHandleChange.bind(this)
         this.searchDist = this.searchDist.bind(this)
         this.districtHandleChange = this.districtHandleChange.bind(this)
+
+        
 
     }
     
@@ -144,12 +156,107 @@ class SearchByDistrict extends Component {
         console.log("dist ID" + this.state.dValue)
 
     }
+
+    
     
     
     
     render() {
 
-        const { error, isLoaded, items, distr, res, merror, misLoaded} = this.state;
+        const { error, isLoaded, items, distr, res } = this.state;
+
+        const columns = [
+            { field: "id", headerName: "ID", width: 100 },
+            { field: "col1", headerName: "Name", width: 150 },
+            { field: "col2", headerName: "Address", width: 150 },
+            { field: "col3", headerName: "From - To", width: 150 },
+            { field: "col4", headerName: "FeeType | Fee | Agelimit" , width: 150 },
+            { field: "col5", headerName: "Available capacity | Available dose1 | Available dose2", width: 150 },
+            { field: "col6", headerName: "Vaccine", width: 150 },
+
+          ];
+
+
+          console.log("result" + res.length)
+
+        
+        
+
+        const rows = res.map((item) => [
+            {
+                id:this.state.getID(),
+                col1:item.name,
+                col2:item.address,
+                col3: [item.from, item.to],
+                col4: [item.fee_type, item.fee, item.min_age_limit],
+                col5: [item.available_capacity, item.available_capacity_dose1, item.available_capacity_dose2],
+                col6: item.vaccine
+
+            }
+        ])
+
+        console.log("value rows " + rows.length)
+
+        // let rows = []
+
+        //   const rows=[
+        //         {id:1, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:2, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:3, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:4, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:5, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:6, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:7, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:8, col1:"apollo", col2:"secunderabad", col3:"24-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:9, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:10, col1:"apollo", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"},
+        //         {id:11, col1:"test", col2:"secunderabad", col3:"26-07-2021", col4:18, col5:2009, col6:"covaxin"}
+        //   ]
+
+
+        //   res.map((item)=>
+
+        // for(let i=0;i<res.length;i++){
+        //     console.log("value " + i)
+
+        //     rows  = [
+
+        //         {
+        //         id:i+1, 
+        //         col1:res[i].name,
+        //         col2:res[i].address,
+        //         col3: [res[i].from, res[i].to],
+        //         col4: [res[i].fee_type, res[i].fee, res[i].min_age_limit],
+        //         col5: [res[i].available_capacity, res[i].available_capacity_dose1, res[i].available_capacity_dose2],
+        //         col6: res[i].vaccine
+
+        //         },
+                // rows[i] =RowsProp[i]
+            // ]
+            // this.setState({id:this.state.id+1})
+            // 
+        // }
+        // console.log("after i "+ rows[2].id)
+
+        // id:item.center_id, 
+        // col1:item.name,
+        // col2:item.address,
+        // col3: [item.from, item.to],
+        // col4: [item.fee_type, item.fee, item.min_age_limit],
+        // col5: [item.available_capacity, item.available_capacity_dose1, item.available_capacity_dose2],
+        // col6: item.vaccine
+            // this.setState({this.state.id:this.state.id+1})
+            // )
+        
+            // console.log("rows data" + rows)
+
+            // const rows = [
+
+           
+            // res.map(item=>`{ ${id: 1}, ${col1: item.name}, ${col2: item.address}, ${col3: item.from} | ${item.to}, ${col4: item.fee_type} | ${item.fee} | ${item.min_age_limit}, ${col5: item.available_capacity} | ${item.available_capacity_dose1} | ${item.available_capacity_dose2}, ${col6: item.vaccine}, },`)
+            
+           
+        //   ];
 
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -211,23 +318,119 @@ class SearchByDistrict extends Component {
                 </Select>
                 
                 </FormControl>
-                <div style={{marginTop:'15px'}}>
+                <div style={{marginTop:'15px', marginBottom:'15px'}}>
                 <Button variant="contained" color="primary" onClick={this.searchDist}>Search</Button>
                 </div>
+                {
+                    (res===undefined) ? <div> No vaccine slots available please come back later </div> :
+                
 
-                <div>
-                            {res.map(item=>(
-                                <div style={{marginBottom:'20px'}}>
-                                    <div>Center Name: {item.name}</div>
-                                    <div>Address: {item.address}</div>
-                                    <div>{item.vaccine}: {item.fee}</div>
+                    <div>
+                    <table style={{width:'100%'}}>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Center Name
+                                        </th>
+                                        <th>
+                                            Address
+                                        </th>
+                                        <th>
+                                            From - To
+                                        </th>
+                                        <th>
+                                            FeeType | Fee | Min Age
+                                        </th>
+                                        <th>
+                                            Available | Dose1 | Dose2
+                                        </th>
+                                        <th>
+                                            Vaccine
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        res.map(item=>(
+                                            <tr>
+                                                <td>
+                                                    {item.name}
+                                                </td>
+                                                <td>
+                                                    {item.address}
+                                                </td>
+                                                <td>
+                                                    {item.from} - {item.to}
+                                                </td>
+                                                <td>
+                                                    {item.fee_type} | {item.fee} | {item.min_age_limit}+
+                                                </td>
+                                                <td>
+                                                    {item.available_capacity} | {item.available_capacity_dose1} | {item.available_capacity_dose2}
+                                                </td>
+                                                <td>
+                                                    {item.vaccine}
+                                                </td>
+
+                                            </tr>
+                                        ))
+                                        
+                                    }
+                                </tbody>
+                            </table>
+
+
+
+
+
+
+                                {/* <div style={{ height: 600, width: "100%" }}>
+                                    <DataGrid rows={rows} columns={columns} />
+                                </div> */}
+
+                                {/* {rows.map(item=>(
+                                <div style={{ height: 600, width: "100%" }}>
+                                    <DataGrid rows={item} columns={columns} />
                                 </div>
-                            ))}
-                </div>
+                                ))} */}
+
+                                {/* {res.map((item, i)=>(
+                                <div style={{ height: 600, width: "100%" }}>
+                                    <DataGrid rows={
+                                        [{
+                                            id:i,
+                                            col1:item.name,
+                                            col2:item.address,
+                                            col3: [item.from, item.to],
+                                            col4: [item.fee_type, item.fee, item.min_age_limit],
+                                            col5: [item.available_capacity, item.available_capacity_dose1, item.available_capacity_dose2],
+                                            col6: item.vaccine
+                                        },
+                                    ]
+                                    }
+                                    columns={columns} />
+                                </div>))
+                                
+                                } */}
+
+
+
+                                {/* {res.map(item=>(
+                                    <div style={{marginBottom:'20px'}}>
+                                        <div>Center Name: {item.name}</div>
+                                        <div>Address: {item.address}</div>
+                                        <div>{item.vaccine}: {item.fee}</div>
+                                    </div>
+                                ))} */}
+                    </div>
+
+            
+            }
                 
             </div>
         )
     }
+   
 }
 }
 
