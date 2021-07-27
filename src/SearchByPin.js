@@ -148,7 +148,7 @@ class SearchByPin extends Component {
                         <Button style={{marginBottom:'20px'}} variant="contained" color="primary" onClick={this.searchPin}>Search</Button>
                         </div>
                         <div>{(items===undefined) ? <div>Enter valid pin</div> : 
-                        ((items.length===0 && this.state.value === '' ) ? <div> n </div> : 
+                        ((items.length===0 && this.state.value === '' ) ? <div>  </div> : 
                         (items.length===0 && this.state.count===1 ) ? <div> No Vaccination slots available please come back later </div> : 
                         <table style={{width:'100%'}}>
                             <thead>
